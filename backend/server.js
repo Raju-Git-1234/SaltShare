@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const db = require('./db');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Check environment variables
 if (
@@ -21,7 +21,10 @@ if (
 
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:5173'
+    origin: [
+        'http://localhost:5173',
+        'https://saltshare-frontend.onrender.com'
+    ]
 }));
 
 app.use(express.json());
