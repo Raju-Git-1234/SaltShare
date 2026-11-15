@@ -25,6 +25,15 @@ function Shares() {
   const quantity = Number(formData.shares_requested);
   const totalAmount = quantity * sharePrice;
 
+  // Dark text and white background for visible input values
+ const inputStyle = {
+  color: '#17351f',
+  backgroundColor: '#ffffff',
+  WebkitTextFillColor: '#17351f',
+  caretColor: '#17351f',
+  opacity: 1
+};
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -32,9 +41,19 @@ function Shares() {
     });
   };
 
+  // SUBMIT SHARE INTEREST REQUEST
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('');
+
+    if (
+      !formData.buyer_name.trim() ||
+      !formData.email.trim() ||
+      !formData.phone.trim()
+    ) {
+      setStatus('Please fill in all required fields.');
+      return;
+    }
 
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > 100) {
       setStatus('Please enter a quantity between 1 and 100.');
@@ -44,24 +63,60 @@ function Shares() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('${import.meta.env.VITE_API_URL}/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ...formData,
-          shares_requested: quantity
-        })
-      });
+      const apiUrl = import.meta.env.VITE_API_URL;
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Unable to submit request.');
+      if (!apiUrl) {
+        throw new Error('Backend API URL is not configured.');
       }
 
-      setStatus(`Success! Your request ID is ${result.requestId}. Your interest request has been saved.`);
+      const response = await fetch(
+        `${apiUrl.replace(/\/$/, '')}/api/share-requests`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            ...formData,
+            buyer_name: formData.buyer_name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim(),
+            shares_requested: quantity
+          })
+        }
+      );
+
+      // Safely handle empty or non-JSON responses
+      const responseText = await response.text();
+
+      let result = {};
+
+      if (responseText) {
+        try {
+          result = JSON.parse(responseText);
+        } catch {
+          throw new Error(
+            'The server returned an invalid response. Please try again.'
+          );
+        }
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          result.message || `Request failed with status ${response.status}`
+        );
+      }
+
+      if (!result.success) {
+        throw new Error(
+          result.message || 'Unable to save your interest request.'
+        );
+      }
+
+      setStatus(
+        `Success! Your request ID is ${result.requestId}. Your interest request has been saved.`
+      );
+
       setFormData({
         buyer_name: '',
         email: '',
@@ -70,7 +125,12 @@ function Shares() {
       });
 
     } catch (error) {
-      setStatus(error.message || 'Backend connection failed. Please try again.');
+      console.error('Share request error:', error);
+
+      setStatus(
+        error.message || 'Backend connection failed. Please try again.'
+      );
+
     } finally {
       setIsSubmitting(false);
     }
@@ -78,8 +138,13 @@ function Shares() {
 
   return (
     <div className="shares-page">
+
+      {/* NAVIGATION */}
       <nav className="shares-navbar">
-        <a href="/" className="shares-logo">Salt<span>Share</span></a>
+        <a href="/" className="shares-logo">
+          Salt<span>Share</span>
+        </a>
+
         <div className="shares-nav-links">
           <a href="/">Home</a>
           <a href="#buyers">Shareholders</a>
@@ -89,21 +154,32 @@ function Shares() {
         </div>
       </nav>
 
+      {/* HERO */}
       <header className="shares-hero">
         <div className="hero-content">
-          <span className="hero-label">SALT MANUFACTURING COMPANY</span>
-          <h1>Welcome to <span>SaltShare</span></h1>
+          <span className="hero-label">
+            SALT MANUFACTURING COMPANY
+          </span>
+
+          <h1>
+            Welcome to <span>SaltShare</span>
+          </h1>
+
           <p>
             Explore our company profile and example share structure.
             Submit an interest request to learn more.
           </p>
-          <a href="#buy-shares" className="red-button">Explore Shares</a>
+
+          <a href="#buy-shares" className="red-button">
+            Explore Shares
+          </a>
         </div>
 
         <div className="price-card">
           <span className="price-card-label">DEMO SHARE PRICE</span>
           <h2>₹20,000</h2>
           <p>Illustrative price per share</p>
+
           <div className="price-card-bottom">
             <span>100 example shares</span>
             <span className="demo-badge">DEMO</span>
@@ -112,11 +188,15 @@ function Shares() {
       </header>
 
       <main>
+
+        {/* SHAREHOLDERS */}
         <section className="buyers-section" id="buyers">
           <div className="section-heading">
             <span>EXAMPLE SHAREHOLDERS</span>
             <h2>Shareholder Overview</h2>
-            <p>Illustrative ownership allocation, not verified ownership records.</p>
+            <p>
+              Illustrative ownership allocation, not verified ownership records.
+            </p>
           </div>
 
           <div className="buyer-grid">
@@ -125,20 +205,26 @@ function Shares() {
                 <div className="buyer-avatar">
                   {person.name.charAt(0)}
                 </div>
+
                 <div className="buyer-info">
                   <h3>{person.name}</h3>
                   <span>Example shareholder</span>
                 </div>
+
                 <div className="buyer-share-count">
                   <strong>{person.shares}</strong>
                   <span>Shares</span>
                 </div>
-                <div className="buyer-percent">{person.percentage}%</div>
+
+                <div className="buyer-percent">
+                  {person.percentage}%
+                </div>
               </article>
             ))}
           </div>
         </section>
 
+        {/* COMPANY DETAILS */}
         <section className="market-section">
           <div className="section-heading">
             <span>COMPANY DETAILS</span>
@@ -151,16 +237,19 @@ function Shares() {
               <h3>100</h3>
               <p>Illustrative structure</p>
             </div>
+
             <div className="market-card">
               <span>Demo Price Per Share</span>
               <h3>₹20,000</h3>
               <p>Not an established market price</p>
             </div>
+
             <div className="market-card">
               <span>Illustrative Total Value</span>
               <h3>₹20,00,000</h3>
               <p>Calculation for demonstration only</p>
             </div>
+
             <div className="market-card">
               <span>Business</span>
               <h3>SaltShare</h3>
@@ -169,6 +258,7 @@ function Shares() {
           </div>
         </section>
 
+        {/* SHARE DISTRIBUTION */}
         <section className="distribution-section" id="distribution">
           <div className="section-heading">
             <span>OWNERSHIP BREAKDOWN</span>
@@ -188,8 +278,11 @@ function Shares() {
                 <div className="distribution-item" key={person.name}>
                   <div className="distribution-label">
                     <strong>{person.name}</strong>
-                    <span>{person.shares} shares · {person.percentage}%</span>
+                    <span>
+                      {person.shares} shares · {person.percentage}%
+                    </span>
                   </div>
+
                   <div className="distribution-track">
                     <div
                       className={`distribution-fill fill-${index}`}
@@ -202,6 +295,7 @@ function Shares() {
           </div>
         </section>
 
+        {/* SHARE INTEREST FORM */}
         <section className="buy-shares-section" id="buy-shares">
           <div className="section-heading">
             <span>BUYER INTEREST FORM</span>
@@ -213,6 +307,7 @@ function Shares() {
             <div className="buy-form-intro">
               <h3>Share Interest Request</h3>
               <p>Enter your details below.</p>
+
               <div className="form-price">
                 <span>Illustrative price per share</span>
                 <strong>₹20,000</strong>
@@ -220,6 +315,7 @@ function Shares() {
             </div>
 
             <form onSubmit={handleSubmit} className="buy-shares-form">
+
               <label htmlFor="buyer_name">Full Name</label>
               <input
                 id="buyer_name"
@@ -228,6 +324,7 @@ function Shares() {
                 placeholder="Enter your full name"
                 value={formData.buyer_name}
                 onChange={handleChange}
+                style={inputStyle}
                 required
               />
 
@@ -239,6 +336,7 @@ function Shares() {
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
+                style={inputStyle}
                 required
               />
 
@@ -250,10 +348,14 @@ function Shares() {
                 placeholder="Enter your phone number"
                 value={formData.phone}
                 onChange={handleChange}
+                style={inputStyle}
                 required
               />
 
-              <label htmlFor="shares_requested">Number of Shares</label>
+              <label htmlFor="shares_requested">
+                Number of Shares
+              </label>
+
               <input
                 id="shares_requested"
                 name="shares_requested"
@@ -263,11 +365,13 @@ function Shares() {
                 step="1"
                 value={formData.shares_requested}
                 onChange={handleChange}
+                style={inputStyle}
                 required
               />
 
               <div className="purchase-total">
                 <span>Illustrative total amount</span>
+
                 <strong>
                   ₹{Number.isFinite(totalAmount)
                     ? totalAmount.toLocaleString('en-IN')
@@ -280,7 +384,9 @@ function Shares() {
                 className="submit-share-btn"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Submitting...' : 'Submit Interest Request'}
+                {isSubmitting
+                  ? 'Submitting...'
+                  : 'Submit Interest Request'}
               </button>
 
               {status && (
@@ -288,28 +394,42 @@ function Shares() {
                   {status}
                 </p>
               )}
+
             </form>
           </div>
 
           <p className="demo-disclaimer">
-            This is an interest-registration demonstration only. Submitting
-            this form does not purchase, reserve or allot shares, and no
-            payment is collected. The displayed price is illustrative.
+            This is an interest-registration demonstration only.
+            Submitting this form does not purchase, reserve or allot
+            shares, and no payment is collected. The displayed price
+            is illustrative.
           </p>
         </section>
 
+        {/* CONTACT */}
         <section className="shares-contact" id="contact">
           <h2>Grow Together with SaltShare</h2>
           <p>Contact our team to learn more about our company.</p>
-          <a href="/#contact" className="red-button">Contact Us</a>
+          <a href="/#contact" className="red-button">
+            Contact Us
+          </a>
         </section>
+
       </main>
 
+      {/* FOOTER */}
       <footer className="shares-footer">
-        <a href="/" className="shares-logo">Salt<span>Share</span></a>
+        <a href="/" className="shares-logo">
+          Salt<span>Share</span>
+        </a>
+
         <p>Growing Together. Building Opportunities.</p>
-        <small>© 2026 SaltShare. All Rights Reserved.</small>
+
+        <small>
+          © 2026 SaltShare. All Rights Reserved.
+        </small>
       </footer>
+
     </div>
   );
 }
