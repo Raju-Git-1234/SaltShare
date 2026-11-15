@@ -42,12 +42,19 @@ function App() {
   // INVESTOR ENQUIRY SUBMISSION
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setIsSubmitting(true);
     setStatus('Submitting your enquiry...');
 
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      if (!apiUrl) {
+        throw new Error('Backend API URL is not configured.');
+      }
+
       const response = await fetch(
-        '${import.meta.env.VITE_API_URL}/api/login',
+        `${apiUrl}/api/enquiries`,
         {
           method: 'POST',
           headers: {
@@ -63,7 +70,9 @@ function App() {
         throw new Error(data.message || 'Submission failed');
       }
 
-      setStatus('Thank you! Your enquiry was submitted successfully.');
+      setStatus(
+        'Thank you! Your enquiry was submitted successfully.'
+      );
 
       setFormData({
         full_name: '',
@@ -74,9 +83,11 @@ function App() {
 
     } catch (error) {
       console.error('Enquiry error:', error);
+
       setStatus(
-        'Unable to submit your enquiry. Please check that the backend server is running.'
+        error.message || 'Unable to submit your enquiry. Please try again.'
       );
+
     } finally {
       setIsSubmitting(false);
     }
@@ -96,9 +107,7 @@ function App() {
           <a href="#home">Home</a>
           <a href="#company">Company</a>
           <a href="#growth">Growth Plan</a>
-          <a href="/shares" className="shares-nav-link">
-            Shares
-          </a>
+          <a href="/shares" className="shares-nav-link">Shares</a>
           <a href="#investors">Investors</a>
           <a href="#contact">Contact</a>
         </nav>
@@ -228,10 +237,11 @@ function App() {
         {/* SHARES SECTION */}
         <section className="shares-home-section section" id="shares">
           <div className="shares-home-content">
-            <p className="section-label">SALTSHARE SHARE INFORMATION</p>
+            <p className="section-label">
+              SALTSHARE SHARE INFORMATION
+            </p>
 
             <h2>Explore Our Shares Page</h2>
-
             <div className="title-line"></div>
 
             <p>
