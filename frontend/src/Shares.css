@@ -1,0 +1,464 @@
+
+* {
+  box-sizing: border-box;
+}
+
+.shares-page {
+  min-height: 100vh;
+  background: #fffafa;
+  color: #252525;
+  font-family: Arial, sans-serif;
+}
+
+.shares-navbar {
+  min-height: 76px;
+  padding: 16px 7%;
+  background: #a90018;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.shares-logo {
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.shares-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.shares-nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.shares-hero {
+  padding: 75px 7%;
+  background: linear-gradient(120deg, #65000e, #c90025);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.hero-content {
+  max-width: 620px;
+}
+
+.hero-content h1 {
+  font-size: clamp(36px, 5vw, 58px);
+  line-height: 1.12;
+  margin: 18px 0;
+}
+
+.hero-content p {
+  color: #ffe5e9;
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.hero-label {
+  display: inline-block;
+  padding: 9px 15px;
+  border: 1px solid #ffb8c4;
+  border-radius: 30px;
+  color: #ffe5e9;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.red-button {
+  display: inline-block;
+  margin-top: 22px;
+  padding: 14px 25px;
+  border-radius: 8px;
+  background: white;
+  color: #a90018;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.price-card {
+  width: 300px;
+  min-width: 260px;
+  padding: 30px;
+  border: 1px solid #ffffff50;
+  border-radius: 18px;
+  background: #ffffff18;
+  box-shadow: 0 15px 40px #40000c35;
+}
+
+.price-card-label {
+  color: #ffe5e9;
+  font-size: 14px;
+}
+
+.price-card h2 {
+  margin: 15px 0;
+  font-size: 38px;
+}
+
+.price-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  color: #ffe5e9;
+}
+
+.demo-badge {
+  display: inline-block;
+  padding: 6px 11px;
+  border-radius: 20px;
+  background: #ffe2e7;
+  color: #a90018;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.buyers-section,
+.market-section,
+.distribution-section,
+.buy-shares-section {
+  padding: 65px 7%;
+}
+
+.section-heading {
+  margin-bottom: 30px;
+}
+
+.section-heading h2 {
+  color: #850015;
+  font-size: 32px;
+  margin: 0 0 10px;
+}
+
+.section-heading p {
+  color: #777;
+  line-height: 1.7;
+}
+
+.buyer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.buyer-card {
+  padding: 25px;
+  background: white;
+  border: 1px solid #f0d8dc;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px #65000e0d;
+}
+
+.buyer-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #ffe2e7;
+  color: #a90018;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.buyer-info {
+  margin-top: 15px;
+}
+
+.buyer-info h3 {
+  margin: 0 0 8px;
+}
+
+.buyer-share-count {
+  color: #a90018;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.buyer-percent {
+  color: #777;
+  font-size: 13px;
+}
+
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.market-card {
+  padding: 25px;
+  border-radius: 14px;
+  background: white;
+  border: 1px solid #f0d8dc;
+}
+
+.market-card h3 {
+  color: #a90018;
+  font-size: 28px;
+  margin: 10px 0;
+}
+
+.market-card p {
+  color: #777;
+}
+
+.distribution-panel {
+  padding: 30px;
+  background: white;
+  border: 1px solid #f0d8dc;
+  border-radius: 16px;
+}
+
+.distribution-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  font-weight: 700;
+}
+
+.distribution-bars {
+  margin-top: 25px;
+}
+
+.distribution-item {
+  margin: 20px 0;
+}
+
+.distribution-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+  font-size: 14px;
+}
+
+.distribution-track {
+  height: 12px;
+  background: #f4e5e8;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.distribution-fill {
+  height: 100%;
+  border-radius: 20px;
+  background: #b4001c;
+}
+
+.fill-0 { width: 60%; }
+.fill-1 { width: 20%; }
+.fill-2 { width: 10%; }
+.fill-3 { width: 10%; }
+
+.demo-disclaimer {
+  margin-top: 25px;
+  padding: 15px;
+  border-left: 4px solid #b4001c;
+  background: #fff0f2;
+  color: #71313c;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Buy shares form */
+
+.buy-shares-section {
+  background: #fff1f3;
+}
+
+.buy-form-card {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 35px;
+  border: 1px solid #f0cbd2;
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 12px 35px #65000e12;
+}
+
+.buy-form-intro {
+  margin-bottom: 25px;
+}
+
+.buy-form-intro h3 {
+  color: #850015;
+  font-size: 24px;
+  margin: 12px 0;
+}
+
+.buy-form-intro p {
+  color: #777;
+  line-height: 1.7;
+}
+
+.form-price {
+  padding: 15px;
+  margin-bottom: 25px;
+  border-radius: 10px;
+  background: #fff0f2;
+  color: #850015;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.buy-shares-form {
+  display: grid;
+  gap: 18px;
+}
+
+.buy-shares-form label {
+  display: grid;
+  gap: 8px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.buy-shares-form input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  font-size: 15px;
+  background: #fff;
+}
+
+.buy-shares-form input:focus {
+  border-color: #b4001c;
+  box-shadow: 0 0 0 3px #b4001c18;
+}
+
+.purchase-total {
+  padding: 20px;
+  border-radius: 10px;
+  background: #fff0f2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: #850015;
+  font-weight: 700;
+}
+
+.purchase-total strong {
+  font-size: 23px;
+}
+
+.submit-share-btn {
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #b4001c;
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.submit-share-btn:hover {
+  background: #800014;
+}
+
+.submit-share-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.share-form-status {
+  padding: 13px;
+  border-radius: 8px;
+  background: #fff0f2;
+  color: #850015;
+  line-height: 1.6;
+}
+
+.shares-contact {
+  padding: 55px 7%;
+  text-align: center;
+  background: #850015;
+  color: white;
+}
+
+.shares-contact p {
+  color: #ffe5e9;
+  line-height: 1.7;
+}
+
+.shares-footer {
+  padding: 20px;
+  background: #51000d;
+  color: #ffdce2;
+  text-align: center;
+  font-size: 13px;
+}
+
+@media (max-width: 950px) {
+  .buyer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .shares-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .price-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 650px) {
+  .shares-navbar {
+    flex-direction: column;
+  }
+
+  .shares-nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .shares-hero {
+    padding: 50px 6%;
+  }
+
+  .buyers-section,
+  .market-section,
+  .distribution-section,
+  .buy-shares-section {
+    padding: 45px 6%;
+  }
+
+  .buyer-grid,
+  .market-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .buy-form-card {
+    padding: 22px;
+  }
+
+  .purchase-total {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
