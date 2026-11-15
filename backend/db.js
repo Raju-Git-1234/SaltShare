@@ -1,18 +1,31 @@
 
 const mysql = require('mysql2');
 
+const isCloudDatabase =
+    process.env.DB_HOST &&
+    process.env.DB_HOST !== 'localhost' &&
+    process.env.DB_HOST !== '127.0.0.1';
+
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'MyNewPassword@123',
-    database: 'saltshare_db'
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT || 3306),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME || 'saltshare_db',
+
+    ...(isCloudDatabase && {
+        ssl: {
+            ca: process.env.DB_CA_CERT,
+            minVersion: 'TLSv1.2'
+        }
+    })
 });
 
 db.connect((err) => {
     if (err) {
-        console.log('MySQL connection failed:', err);
+        console.log('Database connection failed:', err.message);
     } else {
-        console.log('MySQL connected successfully!');
+        console.log('Database connected successfully!');
     }
 });
 
