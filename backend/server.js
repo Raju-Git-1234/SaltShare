@@ -138,38 +138,60 @@ function verifyAdmin(req, res, next) {
 app.post('/api/enquiries', (req, res) => {
     const { full_name, email, phone, message } = req.body;
 
-    if (!full_name || !email || !phone || !message) {
+    if (
+        !full_name?.trim() ||
+        !email?.trim() ||
+        !phone?.trim() ||
+        !message?.trim()
+    ) {
         return res.status(400).json({
             message: 'Please fill in all fields'
         });
     }
 
+    // Database column is name, not full_name
     const sql = `
         INSERT INTO investor_enquiries
-        (full_name, email, phone, message)
+        (name, email, phone, message)
         VALUES (?, ?, ?, ?)
     `;
 
-    db.query(sql, [full_name, email, phone, message], (err, result) => {
-        if (err) {
-            console.error('Enquiry error:', err);
+    db.query(
+        sql,
+        [
+            full_name.trim(),
+            email.trim(),
+            phone.trim(),
+            message.trim()
+        ],
+        (err, result) => {
+            if (err) {
+                console.error('Enquiry error:', err);
 
-            return res.status(500).json({
-                message: 'Failed to save enquiry'
+                return res.status(500).json({
+                    message: 'Failed to save enquiry'
+                });
+            }
+
+            res.status(201).json({
+                success: true,
+                message: 'Enquiry saved successfully!',
+                id: result.insertId
             });
         }
-
-        res.status(201).json({
-            message: 'Enquiry saved successfully!',
-            id: result.insertId
-        });
-    });
+    );
 });
 
 // GET INVESTOR ENQUIRIES (ADMIN ONLY)
 app.get('/api/enquiries', verifyAdmin, (req, res) => {
     const sql = `
-        SELECT *
+        SELECT
+            id,
+            name AS full_name,
+            email,
+            phone,
+            message,
+            created_at
         FROM investor_enquiries
         ORDER BY id DESC
     `;
